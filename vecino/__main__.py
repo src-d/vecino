@@ -2,6 +2,8 @@ import argparse
 import logging
 import sys
 
+from ast2vec import Id2Vec, DocumentFrequencies, NBOW, setup_logging, \
+    ensure_bblfsh_is_running_noexc
 from vecino.similar_repositories import SimilarRepositories
 
 
@@ -27,7 +29,7 @@ def main():
                         help="Minimum number of words in a bag.")
     parser.add_argument("--vocabulary-max", default=500, type=int,
                         help="Maximum number of words in a bag.")
-    parser.add_argument("-n", "-nnn", default=10, type=int,
+    parser.add_argument("-n", "--nnn", default=10, type=int,
                         help="Number of nearest neighbours.")
     parser.add_argument("--early-stop", default=0.1, type=float,
                         help="Maximum fraction of the nBOW dataset to scan.")
@@ -36,6 +38,14 @@ def main():
     parser.add_argument("--skipped-stop", default=0.95, type=float,
                         help="Minimum fraction of skipped samples to stop.")
     args = parser.parse_args()
+    setup_logging(args.log_level)
+    ensure_bblfsh_is_running_noexc()
+    if args.id2vec is not None:
+        args.id2vec = Id2Vec(source=args.id2vec)
+    if args.df is not None:
+        args.df = DocumentFrequencies(source=args.df)
+    if args.nbow is not None:
+        args.nbow = NBOW(source=args.nbow)
     sr = SimilarRepositories(
         id2vec=args.id2vec, df=args.df, nbow=args.nbow,
         verbosity=args.log_level,

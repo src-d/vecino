@@ -39,6 +39,7 @@ class SimilarRepositories:
         self._log.info("Loaded nBOW model: %s", self._nbow)
         self._repo2nbow = Repo2nBOW(
             id2vec, df, log_level=verbosity, **(repo2nbow_kwargs or {}))
+        self._log.info("Creating the WMD engine...")
         self._wmd = WMD(self._id2vec.embeddings, self._nbow,
                         verbosity=verbosity, **(wmd_kwargs or {}))
         if wmd_cache_centroids:
