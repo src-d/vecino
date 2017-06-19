@@ -33,7 +33,7 @@ def main():
                         help="Number of nearest neighbours.")
     parser.add_argument("--early-stop", default=0.1, type=float,
                         help="Maximum fraction of the nBOW dataset to scan.")
-    parser.add_argument("--max-time", default=180, type=int,
+    parser.add_argument("--max-time", default=300, type=int,
                         help="Maximum time to spend scanning in seconds.")
     parser.add_argument("--skipped-stop", default=0.95, type=float,
                         help="Minimum fraction of skipped samples to stop.")
