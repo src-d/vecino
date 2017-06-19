@@ -4,6 +4,8 @@ import re
 from ast2vec import Id2Vec, DocumentFrequencies, NBOW, Repo2nBOW
 from wmd import WMD
 
+from vecino.__main__ import initialize as vecino_initialize
+
 
 class SimilarRepositories:
     GITHUB_URL_RE = re.compile(
@@ -11,7 +13,9 @@ class SimilarRepositories:
 
     def __init__(self, id2vec=None, df=None, nbow=None, verbosity=logging.INFO,
                  wmd_cache_centroids=True, wmd_kwargs=None,
-                 repo2nbow_kwargs=None):
+                 repo2nbow_kwargs=None, initialize_environment=True):
+        if initialize_environment:
+            vecino_initialize()
         self._log = logging.getLogger("similar_repos")
         self._log.setLevel(verbosity)
         if id2vec is None:

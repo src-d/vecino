@@ -3,8 +3,21 @@ import logging
 import sys
 
 from ast2vec import Id2Vec, DocumentFrequencies, NBOW, setup_logging, \
-    ensure_bblfsh_is_running_noexc
+    ensure_bblfsh_is_running_noexc, install_enry
 from vecino.similar_repositories import SimilarRepositories
+
+
+__initialized__ = False
+
+
+def initialize(log_level=logging.INFO, enry=None):
+    global __initialized__
+    if __initialized__:
+        return
+    setup_logging(log_level)
+    ensure_bblfsh_is_running_noexc()
+    install_enry(target=enry)
+    __initialized__ = True
 
 
 def main():
@@ -38,8 +51,9 @@ def main():
     parser.add_argument("--skipped-stop", default=0.95, type=float,
                         help="Minimum fraction of skipped samples to stop.")
     args = parser.parse_args()
-    setup_logging(args.log_level)
-    ensure_bblfsh_is_running_noexc()
+    if args.linguist is None:
+        args.linguist = "./enry"
+    initialize(args.log_level, enry=args.linguist)
     if args.id2vec is not None:
         args.id2vec = Id2Vec(source=args.id2vec)
     if args.df is not None:
