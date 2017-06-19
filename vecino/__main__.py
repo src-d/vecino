@@ -59,7 +59,7 @@ def main():
         args.input, k=args.nnn, early_stop=args.early_stop,
         max_time=args.max_time, skipped_stop=args.skipped_stop)
     for index, rate in neighbours:
-        print("%s\t%.2f" % (index, rate))
+        print("%48s\t%.2f" % (index, rate))
 
 
 if __name__ == "__main__":
