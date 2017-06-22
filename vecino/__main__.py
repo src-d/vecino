@@ -55,6 +55,7 @@ def main():
         id2vec=args.id2vec, df=args.df, nbow=args.nbow,
         verbosity=args.log_level,
         wmd_cache_centroids=not args.no_cache_centroids,
+        gcs_bucket=args.gcs,
         repo2nbow_kwargs={"linguist": args.linguist,
                           "bblfsh_endpoint": args.bblfsh,
                           "timeout": args.timeout},

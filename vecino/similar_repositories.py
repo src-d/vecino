@@ -13,20 +13,22 @@ class SimilarRepositories:
 
     def __init__(self, id2vec=None, df=None, nbow=None, verbosity=logging.INFO,
                  wmd_cache_centroids=True, wmd_kwargs=None,
+                 gcs_bucket=Id2Vec.DEFAULT_GCS_BUCKET,
                  repo2nbow_kwargs=None, initialize_environment=True):
         if initialize_environment:
             initialize()
         self._log = logging.getLogger("similar_repos")
         self._log.setLevel(verbosity)
         if id2vec is None:
-            self._id2vec = Id2Vec(log_level=verbosity)
+            self._id2vec = Id2Vec(log_level=verbosity, gcs_bucket=gcs_bucket)
         else:
             assert isinstance(id2vec, Id2Vec)
             self._id2vec = id2vec
         self._log.info("Loaded id2vec model: %s", self._id2vec)
         if df is None:
             if df is not False:
-                self._df = DocumentFrequencies(log_level=verbosity)
+                self._df = DocumentFrequencies(
+                    log_level=verbosity, gcs_bucket=gcs_bucket)
             else:
                 self._df = None
                 self._log.warning("Disabled document frequencies - you will "
@@ -36,7 +38,7 @@ class SimilarRepositories:
             self._df = df
         self._log.info("Loaded document frequencies: %s", self._df)
         if nbow is None:
-            self._nbow = NBOW(log_level=verbosity)
+            self._nbow = NBOW(log_level=verbosity, gcs_bucket=gcs_bucket)
         else:
             assert isinstance(nbow, NBOW)
             self._nbow = nbow
