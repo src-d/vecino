@@ -2,22 +2,9 @@ import argparse
 import logging
 import sys
 
-from ast2vec import Id2Vec, DocumentFrequencies, NBOW, setup_logging, \
-    ensure_bblfsh_is_running_noexc, install_enry
+from ast2vec import Id2Vec, DocumentFrequencies, NBOW, Repo2Base
 from vecino.similar_repositories import SimilarRepositories
-
-
-__initialized__ = False
-
-
-def initialize(log_level=logging.INFO, enry=None):
-    global __initialized__
-    if __initialized__:
-        return
-    setup_logging(log_level)
-    ensure_bblfsh_is_running_noexc()
-    install_enry(target=enry)
-    __initialized__ = True
+from vecino.environment import initialize
 
 
 def main():
@@ -36,6 +23,10 @@ def main():
                         help="Do not cache WMD centroids.")
     parser.add_argument("--bblfsh", default=None,
                         help="babelfish server address.")
+    parser.add_argument(
+        "--timeout", type=int, default=Repo2Base.DEFAULT_BBLFSH_TIMEOUT,
+        help="Babelfish timeout - longer requests are dropped.")
+    parser.add_argument("--gcs", default=None, help="GCS bucket to use.")
     parser.add_argument("--linguist", default=None,
                         help="Path to github/linguist or src-d/enry.")
     parser.add_argument("--vocabulary-min", default=50, type=int,
@@ -55,17 +46,18 @@ def main():
         args.linguist = "./enry"
     initialize(args.log_level, enry=args.linguist)
     if args.id2vec is not None:
-        args.id2vec = Id2Vec(source=args.id2vec)
+        args.id2vec = Id2Vec(source=args.id2vec, gcs_bucket=args.gcs)
     if args.df is not None:
-        args.df = DocumentFrequencies(source=args.df)
+        args.df = DocumentFrequencies(source=args.df, gcs_bucket=args.gcs)
     if args.nbow is not None:
-        args.nbow = NBOW(source=args.nbow)
+        args.nbow = NBOW(source=args.nbow, gcs_bucket=args.gcs)
     sr = SimilarRepositories(
         id2vec=args.id2vec, df=args.df, nbow=args.nbow,
         verbosity=args.log_level,
         wmd_cache_centroids=not args.no_cache_centroids,
         repo2nbow_kwargs={"linguist": args.linguist,
-                          "bblfsh_endpoint": args.bblfsh},
+                          "bblfsh_endpoint": args.bblfsh,
+                          "timeout": args.timeout},
         wmd_kwargs={"vocabulary_min": args.vocabulary_min,
                     "vocabulary_max": args.vocabulary_max}
     )
