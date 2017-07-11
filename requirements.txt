@@ -1,0 +1,3 @@
+-e git://github.com/bblfsh/client-python.git@v0.0.3#egg=bblfsh
+-e git://github.com/src-d/ast2vec.git@develop#egg=ast2vec
+wmd>=1.2.4
