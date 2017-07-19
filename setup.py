@@ -16,7 +16,7 @@ setup(
     keywords=["machine learning on source code", "word2vec", "id2vec",
               "github", "swivel", "nbow", "bblfsh", "babelfish", "ast2vec"],
     install_requires=["ast2vec>-1.0.0",
-                      "wmd>=1.2.4"],
+                      "wmd>=1.2.6"],
     package_data={"": ["LICENSE", "README.md"]},
     classifiers=[
         "Development Status :: 4 - Beta",

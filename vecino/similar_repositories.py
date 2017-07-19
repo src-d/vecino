@@ -2,6 +2,7 @@ import logging
 import re
 
 from ast2vec import Id2Vec, DocumentFrequencies, NBOW, Repo2nBOW
+from modelforge.backends import create_backend
 from wmd import WMD
 
 from vecino.environment import initialize
@@ -12,23 +13,25 @@ class SimilarRepositories:
         r"(https://|ssh://git@|git://)(github.com/[^/]+/[^/]+)(|.git|/)")
 
     def __init__(self, id2vec=None, df=None, nbow=None, verbosity=logging.INFO,
-                 wmd_cache_centroids=True, wmd_kwargs=None,
-                 gcs_bucket=Id2Vec.DEFAULT_GCS_BUCKET,
+                 wmd_cache_centroids=True, wmd_kwargs=None, gcs_bucket=None,
                  repo2nbow_kwargs=None, initialize_environment=True):
         if initialize_environment:
             initialize()
         self._log = logging.getLogger("similar_repos")
         self._log.setLevel(verbosity)
+        if gcs_bucket:
+            backend = create_backend(args="bucket=" + gcs_bucket)
+        else:
+            backend = create_backend()
         if id2vec is None:
-            self._id2vec = Id2Vec(log_level=verbosity, gcs_bucket=gcs_bucket)
+            self._id2vec = Id2Vec(log_level=verbosity, backend=backend)
         else:
             assert isinstance(id2vec, Id2Vec)
             self._id2vec = id2vec
         self._log.info("Loaded id2vec model: %s", self._id2vec)
         if df is None:
             if df is not False:
-                self._df = DocumentFrequencies(
-                    log_level=verbosity, gcs_bucket=gcs_bucket)
+                self._df = DocumentFrequencies(log_level=verbosity, backend=backend)
             else:
                 self._df = None
                 self._log.warning("Disabled document frequencies - you will "
@@ -38,13 +41,13 @@ class SimilarRepositories:
             self._df = df
         self._log.info("Loaded document frequencies: %s", self._df)
         if nbow is None:
-            self._nbow = NBOW(log_level=verbosity, gcs_bucket=gcs_bucket)
+            self._nbow = NBOW(log_level=verbosity, backend=backend)
         else:
             assert isinstance(nbow, NBOW)
             self._nbow = nbow
         self._log.info("Loaded nBOW model: %s", self._nbow)
         self._repo2nbow = Repo2nBOW(
-            id2vec, df, log_level=verbosity, **(repo2nbow_kwargs or {}))
+            self._id2vec, self._df, log_level=verbosity, **(repo2nbow_kwargs or {}))
         self._log.info("Creating the WMD engine...")
         self._wmd = WMD(self._id2vec.embeddings, self._nbow,
                         verbosity=verbosity, **(wmd_kwargs or {}))

@@ -1,12 +1,13 @@
 import logging
 
-from ast2vec import setup_logging, ensure_bblfsh_is_running_noexc, install_enry
+from modelforge.logs import setup_logging
+from ast2vec import ensure_bblfsh_is_running_noexc, install_enry
 
 
 __initialized__ = False
 
 
-def initialize(log_level=logging.INFO, enry=None):
+def initialize(log_level=logging.INFO, enry="./enry"):
     """
     Sets up the working environment: enables logging, launches the Babelfish
     server if it is not running, installs src-d/enry if it is not found in
@@ -22,5 +23,5 @@ def initialize(log_level=logging.INFO, enry=None):
         return
     setup_logging(log_level)
     ensure_bblfsh_is_running_noexc()
-    install_enry(target=enry)
+    install_enry(target=enry, warn_exists=False)
     __initialized__ = True

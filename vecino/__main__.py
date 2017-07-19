@@ -3,6 +3,7 @@ import logging
 import sys
 
 from ast2vec import Id2Vec, DocumentFrequencies, NBOW, Repo2Base
+from modelforge.backends import create_backend
 from vecino.similar_repositories import SimilarRepositories
 from vecino.environment import initialize
 
@@ -45,12 +46,16 @@ def main():
     if args.linguist is None:
         args.linguist = "./enry"
     initialize(args.log_level, enry=args.linguist)
+    if args.gcs:
+        backend = create_backend(args="bucket=" + args.gcs)
+    else:
+        backend = create_backend()
     if args.id2vec is not None:
-        args.id2vec = Id2Vec(source=args.id2vec, gcs_bucket=args.gcs)
+        args.id2vec = Id2Vec(source=args.id2vec, backend=backend)
     if args.df is not None:
-        args.df = DocumentFrequencies(source=args.df, gcs_bucket=args.gcs)
+        args.df = DocumentFrequencies(source=args.df, backend=backend)
     if args.nbow is not None:
-        args.nbow = NBOW(source=args.nbow, gcs_bucket=args.gcs)
+        args.nbow = NBOW(source=args.nbow, backend=backend)
     sr = SimilarRepositories(
         id2vec=args.id2vec, df=args.df, nbow=args.nbow,
         verbosity=args.log_level,

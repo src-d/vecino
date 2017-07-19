@@ -10,7 +10,7 @@ _install: &_install
   - gimme 1.8
   - source ~/.gimme/envs/latest.env
   - pip install --upgrade pip
-  - pip install -r requirements.txt --no-binary wmd codecov
+  - pip install -r requirements.txt --no-binary wmd codecov git+https://github.com/src-d/modelforge@develop
   - pip install -e .
 _coverage: &_coverage
   - SCRIPT="coverage run -m unittest discover"
