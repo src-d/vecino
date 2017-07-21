@@ -1,0 +1,13 @@
+
+[run]
+branch = True
+source = vecino
+
+[report]
+exclude_lines =
+    no cover
+    raise NotImplementedError
+    if __name__ == "__main__":
+ignore_errors = True
+omit =
+    vecino/tests/*
