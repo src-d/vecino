@@ -1,3 +1,2 @@
-git+https://github.com/bblfsh/client-python.git@v0.0.4#egg=bblfsh
-ast2vec>=0.1.0-alpha
+ast2vec>=0.2.4-alpha
 wmd>=1.2.6

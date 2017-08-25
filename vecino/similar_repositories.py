@@ -24,14 +24,14 @@ class SimilarRepositories:
         else:
             backend = create_backend()
         if id2vec is None:
-            self._id2vec = Id2Vec(log_level=verbosity, backend=backend)
+            self._id2vec = Id2Vec(log_level=verbosity).load(backend=backend)
         else:
             assert isinstance(id2vec, Id2Vec)
             self._id2vec = id2vec
         self._log.info("Loaded id2vec model: %s", self._id2vec)
         if df is None:
             if df is not False:
-                self._df = DocumentFrequencies(log_level=verbosity, backend=backend)
+                self._df = DocumentFrequencies(log_level=verbosity).load(backend=backend)
             else:
                 self._df = None
                 self._log.warning("Disabled document frequencies - you will "
@@ -41,7 +41,7 @@ class SimilarRepositories:
             self._df = df
         self._log.info("Loaded document frequencies: %s", self._df)
         if nbow is None:
-            self._nbow = NBOW(log_level=verbosity, backend=backend)
+            self._nbow = NBOW(log_level=verbosity).load(backend=backend)
         else:
             assert isinstance(nbow, NBOW)
             self._nbow = nbow

@@ -51,11 +51,11 @@ def main():
     else:
         backend = create_backend()
     if args.id2vec is not None:
-        args.id2vec = Id2Vec(source=args.id2vec, backend=backend)
+        args.id2vec = Id2Vec().load(source=args.id2vec, backend=backend)
     if args.df is not None:
-        args.df = DocumentFrequencies(source=args.df, backend=backend)
+        args.df = DocumentFrequencies().load(source=args.df, backend=backend)
     if args.nbow is not None:
-        args.nbow = NBOW(source=args.nbow, backend=backend)
+        args.nbow = NBOW().load(source=args.nbow, backend=backend)
     sr = SimilarRepositories(
         id2vec=args.id2vec, df=args.df, nbow=args.nbow,
         verbosity=args.log_level,
