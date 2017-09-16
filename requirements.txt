@@ -1,2 +1,2 @@
-ast2vec>=0.2.4-alpha
+ast2vec>=0.3.0-alpha
 wmd>=1.2.6

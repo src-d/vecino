@@ -2,7 +2,8 @@ import argparse
 import logging
 import sys
 
-from ast2vec import Id2Vec, DocumentFrequencies, NBOW, Repo2Base
+from ast2vec import Id2Vec, DocumentFrequencies, NBOW, DEFAULT_BBLFSH_TIMEOUT
+
 from modelforge.backends import create_backend
 from vecino.similar_repositories import SimilarRepositories
 from vecino.environment import initialize
@@ -25,8 +26,9 @@ def main():
     parser.add_argument("--bblfsh", default=None,
                         help="babelfish server address.")
     parser.add_argument(
-        "--timeout", type=int, default=Repo2Base.DEFAULT_BBLFSH_TIMEOUT,
-        help="Babelfish timeout - longer requests are dropped.")
+        "--timeout", type=int, default=None,
+        help="Babelfish timeout - longer requests are dropped. The default is %s." %
+            DEFAULT_BBLFSH_TIMEOUT)
     parser.add_argument("--gcs", default=None, help="GCS bucket to use.")
     parser.add_argument("--linguist", default=None,
                         help="Path to github/linguist or src-d/enry.")
