@@ -6,7 +6,7 @@ setup(
     description="Part of source{d}'s stack for machine learning on source "
                 "code. Provides API and tools to find similar GitHub repositories"
                 "based on source code identifiers.",
-    version="0.1.2-alpha",
+    version="0.1.3-alpha",
     license="Apache 2.0",
     author="source{d}",
     author_email="machine-learning@sourced.tech",

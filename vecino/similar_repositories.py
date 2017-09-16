@@ -48,6 +48,10 @@ class SimilarRepositories:
         self._log.info("Loaded nBOW model: %s", self._nbow)
         self._repo2nbow = Repo2nBOW(
             self._id2vec, self._df, log_level=verbosity, **(repo2nbow_kwargs or {}))
+        assert self._nbow.get_dependency("id2vec")["uuid"] == self._id2vec.meta["uuid"]
+        if len(self._id2vec) != self._nbow.matrix.shape[1]:
+            raise ValueError("Models do not match: id2vec has %s tokens while nbow has %s" %
+                             (len(self._id2vec), self._nbow.matrix.shape[1]))
         self._log.info("Creating the WMD engine...")
         self._wmd = WMD(self._id2vec.embeddings, self._nbow,
                         verbosity=verbosity, **(wmd_kwargs or {}))

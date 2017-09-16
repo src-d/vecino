@@ -21,8 +21,6 @@ def main():
                         help="Document frequencies URL or path.")
     parser.add_argument("--nbow", default=None,
                         help="nBOW model URL or path.")
-    parser.add_argument("--no-cache-centroids", action="store_true",
-                        help="Do not cache WMD centroids.")
     parser.add_argument("--bblfsh", default=None,
                         help="babelfish server address.")
     parser.add_argument(
@@ -61,7 +59,7 @@ def main():
     sr = SimilarRepositories(
         id2vec=args.id2vec, df=args.df, nbow=args.nbow,
         verbosity=args.log_level,
-        wmd_cache_centroids=not args.no_cache_centroids,
+        wmd_cache_centroids=False,  # useless for a single query
         gcs_bucket=args.gcs,
         repo2nbow_kwargs={"linguist": args.linguist,
                           "bblfsh_endpoint": args.bblfsh,
