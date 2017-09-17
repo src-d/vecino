@@ -4,9 +4,9 @@ from setuptools import setup, find_packages
 setup(
     name="vecino",
     description="Part of source{d}'s stack for machine learning on source "
-                "code. Provides API and tools to find similar GitHub repositories"
+                "code. Provides API and tools to find similar Git repositories"
                 "based on source code identifiers.",
-    version="0.1.3-alpha",
+    version="0.1.4-alpha",
     license="Apache 2.0",
     author="source{d}",
     author_email="machine-learning@sourced.tech",
@@ -18,7 +18,7 @@ setup(
     },
     keywords=["machine learning on source code", "word2vec", "id2vec",
               "github", "swivel", "nbow", "bblfsh", "babelfish", "ast2vec"],
-    install_requires=["ast2vec>=0.1.0-alpha",
+    install_requires=["ast2vec>=0.3.0-alpha",
                       "wmd>=1.2.6"],
     package_data={"": ["LICENSE", "README.md"]},
     classifiers=[
