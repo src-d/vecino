@@ -26,7 +26,7 @@ def main():
     parser.add_argument(
         "--timeout", type=int, default=None,
         help="Babelfish timeout - longer requests are dropped. The default is %s." %
-            DEFAULT_BBLFSH_TIMEOUT)
+        DEFAULT_BBLFSH_TIMEOUT)
     parser.add_argument("--gcs", default=None, help="GCS bucket to use.")
     parser.add_argument("--linguist", default=None,
                         help="Path to github/linguist or src-d/enry.")
