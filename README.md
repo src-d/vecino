@@ -1,6 +1,6 @@
 ## Vecino
 
-[![Build Status](https://travis-ci.org/src-d/vecino.svg)](https://travis-ci.org/src-d/vecino) [![codecov](https://codecov.io/github/src-d/vecino/coverage.svg?branch=develop)](https://codecov.io/gh/src-d/vecino) [![PyPI](https://img.shields.io/pypi/v/vecino.svg)](https://pypi.python.org/pypi/vecino)
+[![Build Status](https://travis-ci.org/src-d/vecino.svg)](https://travis-ci.org/src-d/vecino) [![codecov](https://codecov.io/github/src-d/vecino/coverage.svg?branch=master)](https://codecov.io/gh/src-d/vecino) [![PyPI](https://img.shields.io/pypi/v/vecino.svg)](https://pypi.python.org/pypi/vecino)
 
 Discovering similar Git repositories.
 
