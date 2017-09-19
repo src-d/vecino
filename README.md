@@ -31,7 +31,8 @@ is from October 2016.
 ### Please note
 
 The currently available public models were converted and are outdated and not fully compatible with
-the preprocessing in ast2vec. Thus the results can be imprecise.
+the preprocessing in ast2vec. Thus the results can be imprecise. The original results can be reproduced in
+the [reference notebook](reference/nearest_repos.ipynb).
 
 Besides, since Babelfish supports only Python and Java at the moment, it is impossible to query
 repositories written in other languages.
