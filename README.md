@@ -1,6 +1,4 @@
-## Vecino
-
-[![Build Status](https://travis-ci.org/src-d/vecino.svg)](https://travis-ci.org/src-d/vecino) [![codecov](https://codecov.io/github/src-d/vecino/coverage.svg?branch=master)](https://codecov.io/gh/src-d/vecino) [![PyPI](https://img.shields.io/pypi/v/vecino.svg)](https://pypi.python.org/pypi/vecino)
+# Vecino [![Build Status](https://travis-ci.org/src-d/vecino.svg)](https://travis-ci.org/src-d/vecino) [![codecov](https://codecov.io/github/src-d/vecino/coverage.svg?branch=master)](https://codecov.io/gh/src-d/vecino) [![PyPI](https://img.shields.io/pypi/v/vecino.svg)](https://pypi.python.org/pypi/vecino)
 
 Vecino is a command line application to discover Git repositories which are similar
 to the one that the user provides.
