@@ -12,9 +12,9 @@ class SimilarRepositories:
     GITHUB_URL_RE = re.compile(
         r"(https://|ssh://git@|git://)(github.com/[^/]+/[^/]+)(|.git|/)")
 
-    def __init__(self, id2vec=None, df=None, nbow=None, verbosity=logging.DEBUG,
-                 wmd_cache_centroids=True, wmd_kwargs=None, gcs_bucket=None,
-                 repo2nbow_kwargs=None, initialize_environment=True):
+    def __init__(self, id2vec=None, df=None, nbow=None, prune_df_threshold=20,
+                 verbosity=logging.DEBUG, wmd_cache_centroids=True, wmd_kwargs=None,
+                 gcs_bucket=None, repo2nbow_kwargs=None, initialize_environment=True):
         if initialize_environment:
             initialize()
         self._log = logging.getLogger("similar_repos")
@@ -39,6 +39,8 @@ class SimilarRepositories:
         else:
             assert isinstance(df, DocumentFrequencies)
             self._df = df
+        if self._df is not None:
+            self._df = self._df.prune(prune_df_threshold)
         self._log.info("Loaded document frequencies: %s", self._df)
         if nbow is None:
             self._nbow = NBOW(log_level=verbosity).load(backend=backend)

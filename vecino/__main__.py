@@ -30,6 +30,9 @@ def main():
     parser.add_argument("--gcs", default=None, help="GCS bucket to use.")
     parser.add_argument("--linguist", default=None,
                         help="Path to github/linguist or src-d/enry.")
+    parser.add_argument("--prune-df", default=20, type=int,
+                        help="Minimum number of times an identifer must occur in documents "
+                             "to be taken into account.")
     parser.add_argument("--vocabulary-min", default=50, type=int,
                         help="Minimum number of words in a bag.")
     parser.add_argument("--vocabulary-max", default=500, type=int,
@@ -58,6 +61,7 @@ def main():
         args.nbow = NBOW().load(source=args.nbow, backend=backend)
     sr = SimilarRepositories(
         id2vec=args.id2vec, df=args.df, nbow=args.nbow,
+        prune_df_threshold=args.prune_df,
         verbosity=args.log_level,
         wmd_cache_centroids=False,  # useless for a single query
         gcs_bucket=args.gcs,
