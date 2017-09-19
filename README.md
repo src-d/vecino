@@ -4,7 +4,7 @@ Vecino is a command line application to discover Git repositories which are simi
 to the one that the user provides.
 
 ```
-vecino https://github.com/apache/spark
+$ vecino https://github.com/apache/spark
 ...
                                     apache/spark	4.07
                                    amplab/graphx	5.80
