@@ -66,7 +66,7 @@ print(engine.query("https://github.com/apache/spark"))
 
 ```
 docker build -t srcd/vecino .
-BBLFSH_DRIVER_IMAGES="python=docker://bblfsh/python-driver:v0.8.2;java=docker://bblfsh/java-driver:v0.6.0" docker run -e BBLFSH_DRIVER_IMAGES --rm -d --privileged -p 9432:9432 --name bblfsh bblfsh/server:v0.7.0 --log-level DEBUG
+BBLFSH_DRIVER_IMAGES="python=docker://bblfsh/python-driver:v0.8.2;java=docker://bblfsh/java-driver:v0.6.0" docker run -e BBLFSH_DRIVER_IMAGES -d --privileged -p 9432:9432 --name bblfsh bblfsh/server:v0.7.0 --log-level DEBUG
 docker run -it --rm srcd/vecino https://github.com/apache/spark
 ```
 
