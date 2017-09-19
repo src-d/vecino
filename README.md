@@ -47,11 +47,19 @@ As in the rest of ML projects at source{d}, only Python3 is supported and Python
 
 ### Usage
 
+Command line:
+
+```
+$ vecino apache/spark
+```
+
+Python API:
+
 ```python
 import vecino
 
 engine = vecino.SimilarRepositories()
-print(engine.query("https://github.com/tensorflow/tensorflow"))
+print(engine.query("https://github.com/apache/spark"))
 ```
 
 ### Docker image
