@@ -7,7 +7,7 @@ setup(
                 "code. Provides API and tools to find similar Git repositories"
                 "based on source code identifiers.",
     version="0.1.6-alpha",
-    license="Apache 2.0",
+    license="Apache Software License",
     author="source{d}",
     author_email="machine-learning@sourced.tech",
     url="https://github.com/src-d/vecino",
