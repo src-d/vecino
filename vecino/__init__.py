@@ -1,2 +1,1 @@
-from vecino.similar_repositories import SimilarRepositories
-from vecino.__main__ import initialize
+from vecino.similar_repositories import SimilarRepositories  # noqa: F401

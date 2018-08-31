@@ -2,11 +2,13 @@ import argparse
 import logging
 import sys
 
-from ast2vec import Id2Vec, DocumentFrequencies, NBOW, DEFAULT_BBLFSH_TIMEOUT
+from sourced.ml.utils import SparkDefault, EngineDefault
 
 from modelforge.backends import create_backend
+from modelforge.logs import setup_logging
+from sourced.ml.models import Id2Vec, DocumentFrequencies, BOW
+
 from vecino.similar_repositories import SimilarRepositories
-from vecino.environment import initialize
 
 
 def main():
@@ -19,19 +21,10 @@ def main():
                         help="id2vec model URL or path.")
     parser.add_argument("--df", default=None,
                         help="Document frequencies URL or path.")
-    parser.add_argument("--nbow", default=None,
-                        help="nBOW model URL or path.")
-    parser.add_argument("--bblfsh", default=None,
-                        help="babelfish server address.")
-    parser.add_argument(
-        "--timeout", type=int, default=None,
-        help="Babelfish timeout - longer requests are dropped. The default is %s." %
-        DEFAULT_BBLFSH_TIMEOUT)
-    parser.add_argument("--gcs", default=None, help="GCS bucket to use.")
-    parser.add_argument("--linguist", default=None,
-                        help="Path to github/linguist or src-d/enry.")
+    parser.add_argument("--bow", default=None,
+                        help="BOW model URL or path.")
     parser.add_argument("--prune-df", default=20, type=int,
-                        help="Minimum number of times an identifer must occur in documents "
+                        help="Minimum number of times an identifier must occur in the dataset "
                              "to be taken into account.")
     parser.add_argument("--vocabulary-min", default=50, type=int,
                         help="Minimum number of words in a bag.")
@@ -45,31 +38,42 @@ def main():
                         help="Maximum time to spend scanning in seconds.")
     parser.add_argument("--skipped-stop", default=0.95, type=float,
                         help="Minimum fraction of skipped samples to stop.")
+    languages = ["Java", "Python", "Go", "JavaScript", "TypeScript", "Ruby", "Bash", "Php"]
+    parser.add_argument(
+        "-l", "--languages", nargs="+", choices=languages,
+        default=None,  # Default value for --languages arg should be None.
+        # Otherwise if you process parquet files without 'lang' column, you will
+        # fail to process it with any --languages argument.
+        help="The programming languages to analyse.")
+    parser.add_argument("--blacklist-languages", action="store_true",
+                        help="Exclude the languages in --languages from the analysis "
+                             "instead of filtering by default.")
+    parser.add_argument(
+        "-s", "--spark", default=SparkDefault.MASTER_ADDRESS,
+        help="Spark's master address.")
+    parser.add_argument("--bblfsh", default=EngineDefault.BBLFSH,
+                        help="Babelfish server's address.")
+    parser.add_argument("--engine", default=EngineDefault.VERSION,
+                        help="source{d} jgit-spark-connector version.")
     args = parser.parse_args()
-    if args.linguist is None:
-        args.linguist = "./enry"
-    initialize(args.log_level, enry=args.linguist)
-    if args.gcs:
-        backend = create_backend(args="bucket=" + args.gcs)
-    else:
-        backend = create_backend()
+    setup_logging(args.log_level)
+    backend = create_backend()
     if args.id2vec is not None:
         args.id2vec = Id2Vec().load(source=args.id2vec, backend=backend)
     if args.df is not None:
         args.df = DocumentFrequencies().load(source=args.df, backend=backend)
-    if args.nbow is not None:
-        args.nbow = NBOW().load(source=args.nbow, backend=backend)
+    if args.bow is not None:
+        args.bow = BOW().load(source=args.bow, backend=backend)
     sr = SimilarRepositories(
-        id2vec=args.id2vec, df=args.df, nbow=args.nbow,
+        id2vec=args.id2vec, df=args.df, nbow=args.bow,
         prune_df_threshold=args.prune_df,
-        verbosity=args.log_level,
         wmd_cache_centroids=False,  # useless for a single query
-        gcs_bucket=args.gcs,
-        repo2nbow_kwargs={"linguist": args.linguist,
-                          "bblfsh_endpoint": args.bblfsh,
-                          "timeout": args.timeout},
         wmd_kwargs={"vocabulary_min": args.vocabulary_min,
-                    "vocabulary_max": args.vocabulary_max}
+                    "vocabulary_max": args.vocabulary_max},
+        languages=(args.languages, args.blacklist_languages),
+        engine_kwargs={"spark": args.spark,
+                       "bblfsh": args.bblfsh,
+                       "engine": args.engine},
     )
     neighbours = sr.query(
         args.input, k=args.nnn, early_stop=args.early_stop,
