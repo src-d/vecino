@@ -1,31 +1,35 @@
 language: python
 sudo: false
-dist: trusty
+dist: xenial
 services:
 - docker
+addons:
+  apt:
+    packages:
+      - libsnappy-dev
 cache:
   directories:
   - "$HOME/.cache/pip"
 _install: &_install
-  - pip install --upgrade pip
+  - pip install --upgrade pip cython
   - pip install -r requirements.txt --no-binary wmd codecov
   - pip install -e .
 _coverage: &_coverage
   - SCRIPT="coverage run -m unittest discover"
 matrix:
   include:
-    - python: 3.4
-      env: *_coverage
-      before_install: *_before_install
-      install: *_install
     - python: 3.5
       env: *_coverage
       before_install: *_before_install
       install: *_install
     - python: 3.6
-      env: SCRIPT="pep8 --max-line-length=99 ."
-      install: pip install pep8
-    - python: 3.6
+      env: *_coverage
+      before_install: *_before_install
+      install: *_install
+    - python: 3.7
+      env: SCRIPT="flake8 --max-line-length=99 ."
+      install: pip install flake8
+    - python: 3.7
       env: *_coverage
       before_install: *_before_install
       install: *_install
