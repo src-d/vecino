@@ -69,8 +69,8 @@ class SimilarRepositories:
             if match is not None:
                 name = match.group(2)
                 try:
-                    repo_index = self._bow.repository_index_by_name(name)
-                except KeyError:
+                    repo_index = self._bow.documents.index(name)
+                except ValueError:
                     pass
         if repo_index >= 0:
             neighbours = self._query_domestic(repo_index, **kwargs)
@@ -93,9 +93,13 @@ class SimilarRepositories:
             if os.path.isdir(url_or_path):
                 url_or_path = os.path.abspath(url_or_path)
                 os.symlink(url_or_path, target, target_is_directory=True)
+                repo_format = "standard"
             else:
+                self._log.info("Cloning %s to %s", url_or_path, target)
                 porcelain.clone(url_or_path, target, bare=True, outstream=sys.stderr)
-            bow = repo2bow(tempdir, 1, df, *self._languages, engine_kwargs=self._engine_kwargs)
+                repo_format = "bare"
+            bow = repo2bow(tempdir, repo_format, 1, df, *self._languages,
+                           engine_kwargs=self._engine_kwargs)
         ibow = {}
         for key, val in bow.items():
             try:

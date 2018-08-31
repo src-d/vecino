@@ -10,15 +10,15 @@ from sourced.ml.transformers import Uast2BagFeatures, Ignition, \
 from sourced.ml.utils import create_engine
 
 
-def repo2bow(repository: str, docfreq_threshold: int, docfreq: DocumentFrequencies,
-             languages: List[str] = None, blacklist_languages=False,
+def repo2bow(repository: str, repository_format: str, docfreq_threshold: int,
+             docfreq: DocumentFrequencies, languages: List[str] = None, blacklist_languages=False,
              engine_kwargs: Dict[str, Any]=None) -> Dict[str, float]:
     log = logging.getLogger("repo2bow")
     token_index = {"i." + key: int(val) for (key, val) in docfreq}
     session_name = "repo2bow-%s" % uuid4()
     engine_args = {
         "repositories": repository,
-        "repository_format": "standard" if not repository.endswith(".git") else "bare",
+        "repository_format": repository_format,
     }
     if engine_kwargs is not None:
         engine_args.update(engine_kwargs)
