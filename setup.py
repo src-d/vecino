@@ -1,12 +1,16 @@
 from setuptools import setup, find_packages
 
+with open("README.md") as f:
+    long_description = f.read()
 
 setup(
     name="vecino",
     description="Part of source{d}'s stack for machine learning on source "
                 "code. Provides API and tools to find similar Git repositories"
                 "based on source code identifiers.",
-    version="0.2.1",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    version="0.2.2",
     license="Apache Software License",
     author="source{d}",
     author_email="machine-learning@sourced.tech",
