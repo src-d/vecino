@@ -11,8 +11,9 @@ from sourced.ml.utils import create_engine
 
 
 def repo2bow(repository: str, repository_format: str, docfreq_threshold: int,
-             docfreq: DocumentFrequencies, languages: List[str] = None, blacklist_languages=False,
-             engine_kwargs: Dict[str, Any]=None) -> Dict[str, float]:
+             docfreq: DocumentFrequencies, languages: List[str] = None, 
+             blacklist_languages = False, engine_kwargs: Dict[str, Any] = None
+             ) -> Dict[str, float]:
     log = logging.getLogger("repo2bow")
     token_index = {"i." + key: int(val) for (key, val) in docfreq}
     session_name = "repo2bow-%s" % uuid4()
